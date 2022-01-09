@@ -8,18 +8,6 @@
   min-height: 100vh;
 }
 
-.nav {
-  background: white;
-  padding: 30px;
-  height: 90vh;
-  left: 5vw;
-  position: absolute;
-  top: 5vh;
-  width: 90vw;
-
-  display: none;
-}
-
 .year {
   display: flex;
   flex-direction: column;

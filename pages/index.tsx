@@ -5,11 +5,11 @@ import Head from "next/head";
 import classnames from "classnames";
 import chroma from "chroma-js";
 import { differenceInWeeks } from "date-fns";
-import { Calendar } from "react-date-range";
 
-import styles from "../styles/Home.module.css";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import styles from "../styles/Home.module.css";
+import { BIRTHDATE_KEY, Nav, TODAY } from "../components/Nav";
 
 const YEARS = 80;
 const YEARS_ARR = Array(YEARS).fill("");
@@ -17,24 +17,25 @@ const WEEKS_IN_YEAR = 52;
 const WEEKS_IN_YEAR_ARR = Array(WEEKS_IN_YEAR).fill("");
 const WEEKS_IN_LIFE = YEARS * WEEKS_IN_YEAR;
 
-const BIRTHDATE_KEY = "BIRTHDATE";
-const TODAY = new Date();
-
 const THEME_1 = ["#43cea2", "#185a9d"]; // Endless River
 const THEME_2 = ["#c33764", "#1d2671"]; // Celestial
 const THEME_3 = ["#ff7e5f", "#feb47b"]; // Sunset
 const THEME_4 = ["#bdc3c7", "#2c3e50"]; // Shades of grey
-const COLOUR_SCALE = chroma.scale(THEME_2).domain([0, WEEKS_IN_LIFE]);
+const ACTIVE_THEME = THEME_2;
+const COLOUR_SCALE = chroma.scale(ACTIVE_THEME).domain([0, WEEKS_IN_LIFE]);
 
 // TODO:
 //    FAB
 //    Theme picker
 //    Date picker
 //    Deploy
-//    number/number
+//    number/number tooltips
+//    Do I still need react-use?
 
 const Home: NextPage = () => {
-  const [birthDate, setBirthDate] = useState(new Date("1952-12-16T00:00:00"));
+  const [isNavVisible, setIsNavVisible] = useState(false);
+
+  const [birthDate, setBirthDate] = useState(new Date("1992-12-16T00:00:00"));
   const delta = differenceInWeeks(TODAY, birthDate);
 
   // Grab the saved birth date from local storage
@@ -43,6 +44,9 @@ const Home: NextPage = () => {
     if (birthDateStore) {
       setBirthDate(new Date(birthDateStore));
     }
+    setTimeout(() => {
+      setIsNavVisible(true);
+    }, 500);
   }, [setBirthDate]);
 
   return (
@@ -77,15 +81,12 @@ const Home: NextPage = () => {
             </div>
           ))}
         </section>
-        <nav className={styles.nav}>
-          <Calendar
-            date={birthDate}
-            onChange={(date) => {
-              setBirthDate(date);
-              localStorage.setItem("", "");
-            }}
-          />
-        </nav>
+        <Nav
+          birthDate={birthDate}
+          isNavVisible={isNavVisible}
+          setBirthDate={setBirthDate}
+          setIsNavVisible={setIsNavVisible}
+        />
       </main>
     </div>
   );

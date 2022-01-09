@@ -14,3 +14,7 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.rdrCalendarWrapper {
+  border-radius: 5px;
+}
